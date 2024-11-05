@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from "react-native";
 import { Link } from "expo-router";
+import { colors } from "../theme";
 
 export default function Index() {
   return (
@@ -15,16 +16,16 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#25292e",
+    backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
-    color: "#fff",
+    color: colors.textDark,
   },
   button: {
     fontSize: 20,
     textDecorationLine: "underline",
-    color: "#fff",
+    color: colors.textDark,
   },
 });

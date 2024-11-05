@@ -1,18 +1,19 @@
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { colors, fontSizes } from "../theme";
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#ffd33d",
+        tabBarActiveTintColor: colors.textLight,
         headerStyle: {
-          backgroundColor: "#25292e",
+          backgroundColor: colors.primary,
         },
         headerShadowVisible: false,
-        headerTintColor: "#fff",
+        headerTintColor: colors.textLight,
         tabBarStyle: {
-          backgroundColor: "#25292e",
+          backgroundColor: colors.primary,
         },
       }}
     >
@@ -24,7 +25,7 @@ export default function TabLayout() {
             <Ionicons
               name={focused ? "home-sharp" : "home-outline"}
               color={color}
-              size={24}
+              size={fontSizes.large}
             />
           ),
         }}
@@ -39,7 +40,7 @@ export default function TabLayout() {
                 focused ? "information-circle" : "information-circle-outline"
               }
               color={color}
-              size={24}
+              size={fontSizes.large}
             />
           ),
         }}
