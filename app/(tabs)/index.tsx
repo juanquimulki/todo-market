@@ -1,14 +1,12 @@
-import { Text, View, StyleSheet } from "react-native";
-import { Link } from "expo-router";
+import { View, StyleSheet } from "react-native";
 import { colors } from "../theme";
+import TextBox from "../components/text-box";
 
 export default function Index() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Home screen</Text>
-      <Link href="/about" style={styles.button}>
-        Go to About screen
-      </Link>
+      <TextBox label={'Artículo'}></TextBox>
+      <TextBox label={'Detalles'}></TextBox>
     </View>
   );
 }
@@ -19,13 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
-  },
-  text: {
-    color: colors.textDark,
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: "underline",
-    color: colors.textDark,
+    padding: 30,
+    gap: 20
   },
 });
