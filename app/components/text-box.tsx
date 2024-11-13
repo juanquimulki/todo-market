@@ -1,11 +1,22 @@
 import { Text, TextInput, View, StyleSheet } from "react-native";
 import { fontSizes, colors } from "../theme";
 
-export default function TextBox(props: { label: String }) {
+export default function TextBox(props: { label: String; keyboardType: any, textChange?: Function }) {
+  function textChange(val: any) {
+    console.log('change')
+
+    if (props.textChange) props.textChange(val)
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{props.label}</Text>
-      <TextInput style={styles.text}></TextInput>
+      <TextInput
+        style={styles.text}
+        keyboardType={props.keyboardType}
+        returnKeyType="done"
+        onChangeText={val => textChange(val)}
+      ></TextInput>
     </View>
   );
 }
@@ -17,7 +28,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: fontSizes.small,
-    fontWeight: 500,
+    fontWeight: "500",
     color: colors.textMedium,
     marginBottom: 3,
   },
