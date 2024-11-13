@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Text,
+  Pressable,
 } from "react-native";
 import { colors, fontSizes } from "../theme";
 import TextBox from "../components/text-box";
@@ -44,7 +45,7 @@ export default function Index() {
     >
       <TextBox label={"Artículo"} keyboardType={"default"}></TextBox>
       <TextBox label={"Detalles"} keyboardType={"default"}></TextBox>
-      <View style={[{ flexDirection: "row", gap: 20 }]}>
+      <View style={styles.viewNumbers}>
         <View style={[{ flex: 1 }]}>
           <TextBox
             label={"Cantidad"}
@@ -60,12 +61,39 @@ export default function Index() {
           ></TextBox>
         </View>
       </View>
-      <View style={[{ alignItems: "center", marginTop: 20 }]}>
-        <Text style={[{ fontSize: fontSizes.large }]}>Total</Text>
-        <Text style={[{ fontSize: fontSizes.xlarge, fontWeight: "bold" }]}>
-          $ {totalValue || "0.00"}
-        </Text>
+      <View style={styles.viewTotal}>
+        <Text style={styles.labelTotal}>Total</Text>
+        <Text style={styles.valueTotal}>$ {totalValue || "0.00"}</Text>
       </View>
+      <Pressable
+        style={({ pressed }) => [
+          {
+            position: "absolute",
+            bottom: 20,
+            backgroundColor: pressed ? colors.primary : colors.secondary,
+            width: "100%",
+            height: 50,
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: 5,
+          },
+        ]}
+        onPress={() => {
+          console.log("pressed");
+        }}
+      >
+        <Text
+          style={[
+            {
+              color: colors.textLight,
+              fontWeight: "bold",
+              fontSize: fontSizes.normal,
+            },
+          ]}
+        >
+          GUARDAR
+        </Text>
+      </Pressable>
     </KeyboardAvoidingView>
   );
 }
@@ -79,4 +107,8 @@ const styles = StyleSheet.create({
     padding: 30,
     gap: 20,
   },
+  viewNumbers: { flexDirection: "row", gap: 20 },
+  viewTotal: { alignItems: "center", marginTop: 20 },
+  valueTotal: { fontSize: fontSizes.xlarge, fontWeight: "bold" },
+  labelTotal: { fontSize: fontSizes.large },
 });

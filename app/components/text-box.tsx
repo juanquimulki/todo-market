@@ -3,8 +3,6 @@ import { fontSizes, colors } from "../theme";
 
 export default function TextBox(props: { label: String; keyboardType: any, textChange?: Function }) {
   function textChange(val: any) {
-    console.log('change')
-
     if (props.textChange) props.textChange(val)
   }
 
