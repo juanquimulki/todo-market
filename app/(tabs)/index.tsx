@@ -2,113 +2,125 @@ import {
   View,
   StyleSheet,
   KeyboardAvoidingView,
-  Platform,
   Text,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { colors, fontSizes } from "../theme";
 import TextBox from "../components/text-box";
 import { useState } from "react";
 
 export default function Index() {
-  const [totalValue, setTotalValue] = useState<String>();
-  const [textQtyValue, setTextQtyValue] = useState<String>();
-  const [textPriceValue, setTextPriceValue] = useState<String>();
+  const [totalValue, setTotalValue] = useState<Number>();
+  const [textQtyValue, setTextQtyValue] = useState<Number>();
+  const [textPriceValue, setTextPriceValue] = useState<Number>();
 
   function textChangeQty(val: String) {
-    setTextQtyValue(val);
-
     let value = val.toString().replace(",", ".");
+    setTextQtyValue(parseFloat(value));
 
     let var1 = parseFloat(value || "0");
     let var2 = parseFloat(textPriceValue?.toString() || "0");
 
-    setTotalValue((var1 * var2).toFixed(2).toString());
+    setTotalValue(var1 * var2);
   }
 
   function textChangePrice(val: String) {
-    setTextPriceValue(val);
-
     let value = val.toString().replace(",", ".");
+    setTextPriceValue(parseFloat(value));
 
     let var1 = parseFloat(value || "0");
     let var2 = parseFloat(textQtyValue?.toString() || "0");
 
-    setTotalValue((var1 * var2).toFixed(2).toString());
+    setTotalValue(var1 * var2);
   }
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior="padding"
       keyboardVerticalOffset={100}
+      style={[{ flex: 1 }]}
     >
-      <TextBox label={"Artículo"} keyboardType={"default"}></TextBox>
-      <TextBox label={"Detalles"} keyboardType={"default"}></TextBox>
-      <View style={styles.viewNumbers}>
-        <View style={[{ flex: 1 }]}>
-          <TextBox
-            label={"Cantidad"}
-            keyboardType={"numeric"}
-            textChange={(val: String) => textChangeQty(val)}
-          ></TextBox>
-        </View>
-        <View style={[{ flex: 1 }]}>
-          <TextBox
-            label={"Precio Unitario"}
-            keyboardType={"numeric"}
-            textChange={(val: String) => textChangePrice(val)}
-          ></TextBox>
-        </View>
-      </View>
-      <View style={styles.viewTotal}>
-        <Text style={styles.labelTotal}>Total</Text>
-        <Text style={styles.valueTotal}>$ {totalValue || "0.00"}</Text>
-      </View>
-      <Pressable
-        style={({ pressed }) => [
+      <ScrollView
+        style={[
           {
-            position: "absolute",
-            bottom: 20,
-            backgroundColor: pressed ? colors.primary : colors.secondary,
-            width: "100%",
-            height: 50,
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 5,
+            flex: 1,
+            flexDirection: "column",
+            backgroundColor: colors.background,
+            padding: 30,
           },
         ]}
-        onPress={() => {
-          console.log("pressed");
-        }}
+        contentContainerStyle={[{ alignItems: "center", flexGrow: 1 }]}
       >
-        <Text
-          style={[
+        <View style={[{ width: "100%" }]}>
+          <TextBox label={"Artículo"} keyboardType={"default"}></TextBox>
+        </View>
+        <View style={[{ marginTop: 20, width: "100%" }]}>
+          <TextBox label={"Detalles"} keyboardType={"default"}></TextBox>
+        </View>
+        <View style={[{ flexDirection: "row", gap: 20, marginTop: 20 }]}>
+          <View style={[{ flex: 1 }]}>
+            <TextBox
+              label={"Cantidad"}
+              keyboardType={"numeric"}
+              textChange={(val: String) => textChangeQty(val)}
+            ></TextBox>
+          </View>
+          <View style={[{ flex: 1 }]}>
+            <TextBox
+              label={"Precio Unitario"}
+              keyboardType={"numeric"}
+              textChange={(val: String) => textChangePrice(val)}
+            ></TextBox>
+          </View>
+        </View>
+        <View style={[{ alignItems: "center", marginTop: 20 }]}>
+          <Text style={[{ fontSize: fontSizes.large }]}>Total</Text>
+          <Text style={[{ fontSize: fontSizes.xlarge, fontWeight: "bold" }]}>
+            ${" "}
+            {Number.isNaN(totalValue) || !totalValue
+              ? "0.00"
+              : totalValue?.toFixed(2).toString()}
+          </Text>
+        </View>
+        <View style={[{ flex: 1 }]}></View>
+        <Pressable
+          style={({ pressed }) => [
             {
-              color: colors.textLight,
-              fontWeight: "bold",
-              fontSize: fontSizes.normal,
+              backgroundColor: colors.secondary,
+              opacity: pressed ? 0.7 : 1,
+              width: "100%",
+              height: 50,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 5,
+              marginTop: 20,
+              shadowColor: pressed ? colors.background : '#000',
+              shadowOffset: { width: 2, height: 2 },
+              shadowOpacity: 0.2,
+              shadowRadius: 3,
+              transform: [{scale: pressed ? 0.97 : 1}]
             },
           ]}
+          onPress={() => {
+            console.log("pressed");
+          }}
         >
-          GUARDAR
-        </Text>
-      </Pressable>
+          <Text
+            style={[
+              {
+                color: colors.textLight,
+                fontWeight: "bold",
+                fontSize: fontSizes.normal,
+              },
+            ]}
+          >
+            GUARDAR
+          </Text>
+        </Pressable>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 30,
-    gap: 20,
-  },
-  viewNumbers: { flexDirection: "row", gap: 20 },
-  viewTotal: { alignItems: "center", marginTop: 20 },
-  valueTotal: { fontSize: fontSizes.xlarge, fontWeight: "bold" },
-  labelTotal: { fontSize: fontSizes.large },
-});
+const styles = StyleSheet.create({});
