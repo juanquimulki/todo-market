@@ -10,10 +10,15 @@ import { colors, fontSizes } from "../theme";
 import TextBox from "../components/text-box";
 import { useState } from "react";
 
+import * as SQLite from "expo-sqlite";
+
 export default function Index() {
   const [totalValue, setTotalValue] = useState<Number>();
   const [textQtyValue, setTextQtyValue] = useState<Number>();
   const [textPriceValue, setTextPriceValue] = useState<Number>();
+
+  const [textName, setTextName] = useState<String>("");
+  const [textDetails, setTextDetails] = useState<String>("");
 
   function textChangeQty(val: String) {
     let value = val.toString().replace(",", ".");
@@ -35,6 +40,38 @@ export default function Index() {
     setTotalValue(var1 * var2);
   }
 
+  async function save() {
+    const db = await SQLite.openDatabaseAsync("myDb");
+
+    await db.execAsync(`
+      PRAGMA journal_mode = WAL;
+      
+      CREATE TABLE IF NOT EXISTS articles (
+        id INTEGER PRIMARY KEY NOT NULL, 
+        name TEXT NOT NULL,
+        details TEXT NULL,
+        qty REAL NOT NULL,
+        price REAL NOT NULL,
+        total REAL NOT NULL
+      );`);
+
+    const statement = await db.prepareAsync(
+      "INSERT INTO articles (name, details, qty, price, total) VALUES ($name, $details, $qty, $price, $total)"
+    );
+    try {
+      let result = await statement.executeAsync({
+        $name: (textName ?? '').toString(),
+        $details: (textDetails ?? '').toString(),
+        $qty: (textQtyValue ?? 0).toFixed(2),
+        $price: (textPriceValue ?? 0).toFixed(2),
+        $total: (totalValue ?? 0).toFixed(2),
+      });
+      console.log("inserted row:", result.lastInsertRowId, result.changes);
+    } finally {
+      await statement.finalizeAsync();
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       behavior="padding"
@@ -53,10 +90,14 @@ export default function Index() {
         contentContainerStyle={[{ alignItems: "center", flexGrow: 1 }]}
       >
         <View style={[{ width: "100%" }]}>
-          <TextBox label={"Artículo"} keyboardType={"default"}></TextBox>
+          <TextBox label={"Artículo"} keyboardType={"default"} textChange={(val: String) => setTextName(val)}></TextBox>
         </View>
         <View style={[{ marginTop: 20, width: "100%" }]}>
-          <TextBox label={"Detalles"} keyboardType={"default"}></TextBox>
+          <TextBox
+            label={"Detalles"}
+            keyboardType={"default"}
+            textChange={(val: String) => setTextDetails(val)}
+          ></TextBox>
         </View>
         <View style={[{ flexDirection: "row", gap: 20, marginTop: 20 }]}>
           <View style={[{ flex: 1 }]}>
@@ -95,15 +136,16 @@ export default function Index() {
               justifyContent: "center",
               borderRadius: 5,
               marginTop: 20,
-              shadowColor: pressed ? colors.background : '#000',
+              shadowColor: pressed ? colors.background : "#000",
               shadowOffset: { width: 2, height: 2 },
               shadowOpacity: 0.2,
               shadowRadius: 3,
-              transform: [{scale: pressed ? 0.97 : 1}]
+              transform: [{ scale: pressed ? 0.97 : 1 }],
             },
           ]}
-          onPress={() => {
+          onPress={async () => {
             console.log("pressed");
+            await save();
           }}
         >
           <Text
