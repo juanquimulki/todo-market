@@ -9,8 +9,7 @@ import {
 import { colors, fontSizes } from "../theme";
 import TextBox from "../components/text-box";
 import { useState } from "react";
-
-import * as SQLite from "expo-sqlite";
+import SQLsave from "../sqlite"
 
 export default function Index() {
   const [totalValue, setTotalValue] = useState<Number>();
@@ -38,38 +37,6 @@ export default function Index() {
     let var2 = parseFloat(textQtyValue?.toString() || "0");
 
     setTotalValue(var1 * var2);
-  }
-
-  async function save() {
-    const db = await SQLite.openDatabaseAsync("myDb");
-
-    await db.execAsync(`
-      PRAGMA journal_mode = WAL;
-      
-      CREATE TABLE IF NOT EXISTS articles (
-        id INTEGER PRIMARY KEY NOT NULL, 
-        name TEXT NOT NULL,
-        details TEXT NULL,
-        qty REAL NOT NULL,
-        price REAL NOT NULL,
-        total REAL NOT NULL
-      );`);
-
-    const statement = await db.prepareAsync(
-      "INSERT INTO articles (name, details, qty, price, total) VALUES ($name, $details, $qty, $price, $total)"
-    );
-    try {
-      let result = await statement.executeAsync({
-        $name: (textName ?? '').toString(),
-        $details: (textDetails ?? '').toString(),
-        $qty: (textQtyValue ?? 0).toFixed(2),
-        $price: (textPriceValue ?? 0).toFixed(2),
-        $total: (totalValue ?? 0).toFixed(2),
-      });
-      console.log("inserted row:", result.lastInsertRowId, result.changes);
-    } finally {
-      await statement.finalizeAsync();
-    }
   }
 
   return (
@@ -145,7 +112,7 @@ export default function Index() {
           ]}
           onPress={async () => {
             console.log("pressed");
-            await save();
+            await SQLsave(textName, textDetails, textQtyValue, textPriceValue, totalValue);
           }}
         >
           <Text
