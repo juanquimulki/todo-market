@@ -1,134 +1,137 @@
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Text,
-  Pressable,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { colors, fontSizes } from "../theme";
-import TextBox from "../components/text-box";
-import { useState } from "react";
-import SQLsave from "../sqlite"
 
 export default function Index() {
-  const [totalValue, setTotalValue] = useState<Number>();
-  const [textQtyValue, setTextQtyValue] = useState<Number>();
-  const [textPriceValue, setTextPriceValue] = useState<Number>();
-
-  const [textName, setTextName] = useState<String>("");
-  const [textDetails, setTextDetails] = useState<String>("");
-
-  function textChangeQty(val: String) {
-    let value = val.toString().replace(",", ".");
-    setTextQtyValue(parseFloat(value));
-
-    let var1 = parseFloat(value || "0");
-    let var2 = parseFloat(textPriceValue?.toString() || "0");
-
-    setTotalValue(var1 * var2);
-  }
-
-  function textChangePrice(val: String) {
-    let value = val.toString().replace(",", ".");
-    setTextPriceValue(parseFloat(value));
-
-    let var1 = parseFloat(value || "0");
-    let var2 = parseFloat(textQtyValue?.toString() || "0");
-
-    setTotalValue(var1 * var2);
-  }
-
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={100}
-      style={[{ flex: 1 }]}
-    >
-      <ScrollView
+    <View style={[{ padding: 10 }]}>
+      <View
         style={[
           {
-            flex: 1,
             flexDirection: "column",
-            backgroundColor: colors.background,
-            padding: 30,
+            backgroundColor: colors.secondary,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            padding: 10,
+            shadowOffset: { width: 2, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 3,
           },
         ]}
-        contentContainerStyle={[{ alignItems: "center", flexGrow: 1 }]}
       >
-        <View style={[{ width: "100%" }]}>
-          <TextBox label={"Artículo"} keyboardType={"default"} textChange={(val: String) => setTextName(val)}></TextBox>
-        </View>
-        <View style={[{ marginTop: 20, width: "100%" }]}>
-          <TextBox
-            label={"Detalles"}
-            keyboardType={"default"}
-            textChange={(val: String) => setTextDetails(val)}
-          ></TextBox>
-        </View>
-        <View style={[{ flexDirection: "row", gap: 20, marginTop: 20 }]}>
-          <View style={[{ flex: 1 }]}>
-            <TextBox
-              label={"Cantidad"}
-              keyboardType={"numeric"}
-              textChange={(val: String) => textChangeQty(val)}
-            ></TextBox>
-          </View>
-          <View style={[{ flex: 1 }]}>
-            <TextBox
-              label={"Precio Unitario"}
-              keyboardType={"numeric"}
-              textChange={(val: String) => textChangePrice(val)}
-            ></TextBox>
-          </View>
-        </View>
-        <View style={[{ alignItems: "center", marginTop: 20 }]}>
-          <Text style={[{ fontSize: fontSizes.large }]}>Total</Text>
-          <Text style={[{ fontSize: fontSizes.xlarge, fontWeight: "bold" }]}>
-            ${" "}
-            {Number.isNaN(totalValue) || !totalValue
-              ? "0.00"
-              : totalValue?.toFixed(2).toString()}
-          </Text>
-        </View>
-        <View style={[{ flex: 1 }]}></View>
-        <Pressable
-          style={({ pressed }) => [
+        <View
+          style={[
             {
-              backgroundColor: colors.secondary,
-              opacity: pressed ? 0.7 : 1,
-              width: "100%",
-              height: 50,
+              position: "absolute",
+              top: 20,
+              right: 20,
+              backgroundColor: colors.textLight,
+              width: 44,
+              height: 44,
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 5,
-              marginTop: 20,
-              shadowColor: pressed ? colors.background : "#000",
+              borderRadius: "100%",
+              padding: 0,
               shadowOffset: { width: 2, height: 2 },
               shadowOpacity: 0.2,
               shadowRadius: 3,
-              transform: [{ scale: pressed ? 0.97 : 1 }],
             },
           ]}
-          onPress={async () => {
-            console.log("pressed");
-            await SQLsave(textName, textDetails, textQtyValue, textPriceValue, totalValue);
-          }}
         >
           <Text
+            style={[{ color: colors.secondary, fontSize: fontSizes.xlarge, textAlign: "center", marginTop: -3, marginLeft: 2 }]}
+          >
+            +
+          </Text>
+        </View>
+        <Text style={[{ color: colors.textLight, fontSize: fontSizes.small }]}>
+          Presupuesto: $9999.99
+        </Text>
+        <Text
+          style={[
+            {
+              color: colors.textLight,
+              fontSize: fontSizes.large,
+              marginTop: 20,
+            },
+          ]}
+        >
+          Total:
+        </Text>
+        <Text
+          style={[
+            {
+              color: colors.textLight,
+              fontSize: fontSizes.xlarge,
+              fontWeight: "bold",
+            },
+          ]}
+        >
+          $9999.99
+        </Text>
+      </View>
+      <View
+        style={[
+          {
+            backgroundColor: colors.secondaryDark,
+            borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10,
+            padding: 10,
+            height: 55,
+            shadowOffset: { width: 2, height: 2 },
+            shadowOpacity: 0.2,
+            shadowRadius: 3,
+          },
+        ]}
+      >
+        <View
+          style={[
+            {
+              flexDirection: "row",
+              justifyContent: "space-between",
+            },
+          ]}
+        >
+          <Text
+            style={[{ color: colors.textLight, fontSize: fontSizes.xsmall }]}
+          >
+            0%
+          </Text>
+          <Text
+            style={[{ color: colors.textLight, fontSize: fontSizes.xsmall }]}
+          >
+            #Items 9999
+          </Text>
+          <Text
+            style={[{ color: colors.textLight, fontSize: fontSizes.xsmall }]}
+          >
+            100%
+          </Text>
+        </View>
+
+        <View>
+          <View
             style={[
               {
-                color: colors.textLight,
-                fontWeight: "bold",
-                fontSize: fontSizes.normal,
+                height: 1,
+                backgroundColor: colors.textLight,
+                marginTop: 7,
+                width: "100%",
               },
             ]}
-          >
-            GUARDAR
-          </Text>
-        </Pressable>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          ></View>
+          <View
+            style={[
+              {
+                height: 5,
+                backgroundColor: colors.textLight,
+                marginTop: -3,
+                width: "75%",
+              },
+            ]}
+          ></View>
+        </View>
+      </View>
+    </View>
   );
 }
 
