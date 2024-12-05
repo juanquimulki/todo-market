@@ -1,137 +1,47 @@
-import { View, StyleSheet, Text } from "react-native";
-import { colors, fontSizes } from "../theme";
+import { StyleSheet } from "react-native";
+import InfoCard from "../components/info-card";
+import { FlatList, GestureHandlerRootView } from "react-native-gesture-handler";
+import ItemCard from "../components/item-card";
 
 export default function Index() {
-  return (
-    <View style={[{ padding: 10 }]}>
-      <View
-        style={[
-          {
-            flexDirection: "column",
-            backgroundColor: colors.secondary,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            padding: 10,
-            shadowOffset: { width: 2, height: 2 },
-            shadowOpacity: 0.2,
-            shadowRadius: 3,
-          },
-        ]}
-      >
-        <View
-          style={[
-            {
-              position: "absolute",
-              top: 20,
-              right: 20,
-              backgroundColor: colors.textLight,
-              width: 44,
-              height: 44,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "100%",
-              padding: 0,
-              shadowOffset: { width: 2, height: 2 },
-              shadowOpacity: 0.2,
-              shadowRadius: 3,
-            },
-          ]}
-        >
-          <Text
-            style={[{ color: colors.secondary, fontSize: fontSizes.xlarge, textAlign: "center", marginTop: -3, marginLeft: 2 }]}
-          >
-            +
-          </Text>
-        </View>
-        <Text style={[{ color: colors.textLight, fontSize: fontSizes.small }]}>
-          Presupuesto: $9999.99
-        </Text>
-        <Text
-          style={[
-            {
-              color: colors.textLight,
-              fontSize: fontSizes.large,
-              marginTop: 20,
-            },
-          ]}
-        >
-          Total:
-        </Text>
-        <Text
-          style={[
-            {
-              color: colors.textLight,
-              fontSize: fontSizes.xlarge,
-              fontWeight: "bold",
-            },
-          ]}
-        >
-          $9999.99
-        </Text>
-      </View>
-      <View
-        style={[
-          {
-            backgroundColor: colors.secondaryDark,
-            borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10,
-            padding: 10,
-            height: 55,
-            shadowOffset: { width: 2, height: 2 },
-            shadowOpacity: 0.2,
-            shadowRadius: 3,
-          },
-        ]}
-      >
-        <View
-          style={[
-            {
-              flexDirection: "row",
-              justifyContent: "space-between",
-            },
-          ]}
-        >
-          <Text
-            style={[{ color: colors.textLight, fontSize: fontSizes.xsmall }]}
-          >
-            0%
-          </Text>
-          <Text
-            style={[{ color: colors.textLight, fontSize: fontSizes.xsmall }]}
-          >
-            #Items 9999
-          </Text>
-          <Text
-            style={[{ color: colors.textLight, fontSize: fontSizes.xsmall }]}
-          >
-            100%
-          </Text>
-        </View>
+  const DATA = [
+    {
+      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+      title: "First Item",
+    },
+    {
+      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+      title: "Second Item",
+    },
+    {
+      id: "58694a0f-3da1-471f-bd96-145571e29d72",
+      title: "Third Item",
+    },
+    {
+      id: "58695a0f-3da1-471f-bd96-145571e29d72",
+      title: "Third Item",
+    },
+    {
+      id: "58623a0f-3da1-471f-bd96-145571e29d72",
+      title: "Third Item",
+    },
+    {
+      id: "58612a0f-3da1-471f-bd96-145571e29d72",
+      title: "Third Item",
+    },
+  ];
 
-        <View>
-          <View
-            style={[
-              {
-                height: 1,
-                backgroundColor: colors.textLight,
-                marginTop: 7,
-                width: "100%",
-              },
-            ]}
-          ></View>
-          <View
-            style={[
-              {
-                height: 5,
-                backgroundColor: colors.textLight,
-                marginTop: -3,
-                width: "75%",
-              },
-            ]}
-          ></View>
-        </View>
-      </View>
-    </View>
+  return (
+    <GestureHandlerRootView style={[{ padding: 10 }]}>
+      <InfoCard></InfoCard>
+
+      <FlatList
+        style={[{ paddingHorizontal: 10 }]}
+        data={DATA}
+        renderItem={({ item }) => <ItemCard></ItemCard>}
+        keyExtractor={(item) => item.id}
+      />
+    </GestureHandlerRootView>
   );
 }
 
