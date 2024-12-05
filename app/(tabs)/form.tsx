@@ -9,7 +9,7 @@ import {
 import { colors, fontSizes } from "../theme";
 import TextBox from "../components/text-box";
 import { useState } from "react";
-import SQLsave from "../sqlite"
+import { SQLsave } from "../sqlite";
 
 export default function Index() {
   const [totalValue, setTotalValue] = useState<Number>();
@@ -57,7 +57,11 @@ export default function Index() {
         contentContainerStyle={[{ alignItems: "center", flexGrow: 1 }]}
       >
         <View style={[{ width: "100%" }]}>
-          <TextBox label={"Artículo"} keyboardType={"default"} textChange={(val: String) => setTextName(val)}></TextBox>
+          <TextBox
+            label={"Artículo"}
+            keyboardType={"default"}
+            textChange={(val: String) => setTextName(val)}
+          ></TextBox>
         </View>
         <View style={[{ marginTop: 20, width: "100%" }]}>
           <TextBox
@@ -111,8 +115,13 @@ export default function Index() {
             },
           ]}
           onPress={async () => {
-            console.log("pressed");
-            await SQLsave(textName, textDetails, textQtyValue, textPriceValue, totalValue);
+            await SQLsave(
+              textName,
+              textDetails,
+              textQtyValue,
+              textPriceValue,
+              totalValue
+            );
           }}
         >
           <Text

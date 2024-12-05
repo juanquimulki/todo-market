@@ -1,5 +1,11 @@
 import * as SQLite from "expo-sqlite";
 
+export interface Item {
+  id: number;
+  name: string;
+  price: number;
+}
+
 const createDb = async () => {
   const db = await SQLite.openDatabaseAsync("myDb");
 
@@ -16,7 +22,7 @@ const createDb = async () => {
         );`);
 };
 
-const SQLsave = async (
+export const SQLsave = async (
   name: String,
   details: String,
   qty?: Number,
@@ -31,17 +37,27 @@ const SQLsave = async (
     "INSERT INTO articles (name, details, qty, price, total) VALUES ($name, $details, $qty, $price, $total)"
   );
   try {
-    let result = await statement.executeAsync({
+    await statement.executeAsync({
       $name: (name ?? "").toString(),
       $details: (details ?? "").toString(),
       $qty: (qty ?? 0).toFixed(2),
       $price: (price ?? 0).toFixed(2),
       $total: (total ?? 0).toFixed(2),
     });
-    console.log("inserted row:", result.lastInsertRowId, result.changes);
   } finally {
     await statement.finalizeAsync();
   }
 };
 
-export default SQLsave;
+export const SQLselect = async (): Promise<Item[]> => {
+  createDb();
+
+  const db = await SQLite.openDatabaseAsync("myDb");
+
+  try {
+    const results = await db.getAllAsync<Item>("SELECT * FROM articles");
+    return results;
+  } catch {
+    return [];
+  }
+};
