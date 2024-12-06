@@ -28,7 +28,7 @@ export default function Index() {
       <FlatList
         style={[{ paddingHorizontal: 10 }]}
         data={items}
-        renderItem={({ item }) => <ItemCard></ItemCard>}
+        renderItem={({ item }) => <ItemCard item={item}></ItemCard>}
         keyExtractor={(item) => item.id.toString()}
       />
     </GestureHandlerRootView>

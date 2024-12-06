@@ -1,7 +1,8 @@
 import { Text, View, StyleSheet } from "react-native";
 import { fontSizes, colors } from "../theme";
+import { Item } from "../sqlite";
 
-export default function ItemCard() {
+export default function ItemCard(props: { item: Item }) {
   return (
     <View
       style={[
@@ -24,7 +25,7 @@ export default function ItemCard() {
           },
         ]}
       >
-        Papel Higiénico
+        {props.item.name}
       </Text>
       <Text
         style={[
@@ -35,13 +36,30 @@ export default function ItemCard() {
           },
         ]}
       >
-        Higienol de 100mts x 4
+        {props.item.details}
       </Text>
       <Text style={[{ fontSize: fontSizes.small, marginTop: 10 }]}>
-        Cantidad: <Text style={[{ fontWeight: "500" }]}>99</Text>
+        Cantidad: <Text style={[{ fontWeight: "500" }]}>{props.item.qty}</Text>
       </Text>
       <Text style={[{ fontSize: fontSizes.small, marginTop: 2 }]}>
-        Precio Unitario: <Text style={[{ fontWeight: "500" }]}>$999.99</Text>
+        Precio Unitario:{" "}
+        <Text style={[{ fontWeight: "500" }]}>
+          ${props.item.price.toFixed(2)}
+        </Text>
+      </Text>
+      <Text
+        style={[
+          {
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+            fontSize: fontSizes.large,
+            fontWeight: "bold",
+            color: colors.primary,
+          },
+        ]}
+      >
+        ${props.item.total.toFixed(2)}
       </Text>
     </View>
   );

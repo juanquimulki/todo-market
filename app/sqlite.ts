@@ -3,7 +3,10 @@ import * as SQLite from "expo-sqlite";
 export interface Item {
   id: number;
   name: string;
+  details: string;
+  qty: number;
   price: number;
+  total: number;
 }
 
 const createDb = async () => {
